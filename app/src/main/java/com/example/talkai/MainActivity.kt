@@ -10,6 +10,6 @@ class MainActivity : AppCompatActivity() {
 
         //加了注释1111
         //加了注释
-
+        var va: String = "你好"
     }
 }
