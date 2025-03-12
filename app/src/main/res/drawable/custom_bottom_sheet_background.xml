@@ -1,0 +1,15 @@
+<!-- res/drawable/custom_bottom_sheet_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 设置背景颜色 -->
+    <solid android:color="?attr/colorSurface" /> <!-- 使用主题中的 surface 颜色 -->
+
+    <!-- 设置圆角 -->
+    <corners
+        android:topLeftRadius="16dp"
+        android:topRightRadius="16dp" />
+
+    <!-- 设置边框（可选） -->
+    <stroke
+        android:width="1dp"
+        android:color="?attr/colorOutline" /> <!-- 使用主题中的 outline 颜色 -->
+</shape>

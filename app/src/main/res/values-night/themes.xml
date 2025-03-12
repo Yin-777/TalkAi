@@ -1,7 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.TalkAi" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+            <item name="colorPrimary">@color/dark_colorPrimary</item>
+            <item name="colorPrimaryDark">@color/dark_colorPrimaryDark</item>
+            <item name="colorAccent">@color/dark_colorAccent</item>
+
+
+
+        <item name="android:textColorPrimary">@color/text_color_primary_night</item>
+        <item name="android:textColorSecondary">@color/text_color_secondary_night</item>
+        <item name="colorOnPrimary">@android:color/black</item>
     </style>
 </resources>
