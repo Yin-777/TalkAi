@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/styles.xml -->
+<resources>
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight">
+        <!-- 定义你的主题颜色 -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSurface">#FFFFFF</item> <!-- 定义 surface 颜色 -->
+        <item name="colorOutline">#FFFFFF</item> <!-- 定义边框颜色 -->
+    </style>
+
+    <style name="CustomBottomSheet" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetModal</item>
+    </style>
+
+    <style name="CustomBottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/custom_bottom_sheet_background</item>
+        <!-- 其他自定义属性 -->
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.BottomSheet</item>
+    </style>
+
+    <!-- 定义 BottomSheet 的形状外观 -->
+    <style name="ShapeAppearanceOverlay.BottomSheet" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+    </style>
+
+
+
+    <!--提示加载框样式-->
+    <style name="ZDYDialog" parent="Theme.AppCompat.Dialog">
+        <!--去除5.0以后两侧留白问题-->
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--进度条颜色-->
+        <item name="colorAccent">@color/blue</item>
+    </style>
+
+</resources>

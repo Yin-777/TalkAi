@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/TalkFragment">
+    <fragment
+        android:id="@+id/TalkFragment"
+        android:name="com.example.talkai.ui.fragment.TalkFragment"
+        android:label="Talk" />
+    <fragment
+        android:id="@+id/WordFragment"
+        android:name="com.example.talkai.ui.fragment.WordFragment"
+        android:label="Word" />
+    <fragment
+        android:id="@+id/MeFragment"
+        android:name="com.example.talkai.ui.fragment.MeFragment"
+        android:label="Me" />
+</navigation>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/bg_rounded_top_corner"> <!-- 圆角背景 -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/remove_icon"
+        android:layout_marginBottom="10dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/ed_id"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="手机号码"
+        android:textColorHint="@color/white"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_margin="20dp"
+        />
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/ed_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="密码"
+        android:textColorHint="@color/white"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        />
+
+
+
+    <!-- 账号登录 -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_login_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="登录"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:background="@drawable/rounded_blue_button_selector"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="40dp"
+        />
+
+
+</LinearLayout>
+
+
