@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@drawable/bg_rounded_top_corner"> <!-- 圆角背景 -->
+    android:background="@drawable/bg_rounded_top_corner"
+    > <!-- 圆角背景 -->
+
+
+    <!--   加载动画-->
+    <ImageView
+        android:id="@+id/iv_loading"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -15,6 +27,7 @@
         />
 
     <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_phone"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="手机号码"
@@ -27,6 +40,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_code"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:hint="验证码"
@@ -43,10 +57,20 @@
             android:layout_gravity="center"
             android:background="@drawable/rounded_blue_button_selector"
             android:text="发送验证码"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="18dp" />
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="设置密码"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:layout_margin="20dp"
+        />
 
     <!-- 手机注册 -->
     <androidx.appcompat.widget.AppCompatButton
@@ -55,6 +79,7 @@
         android:layout_height="wrap_content"
         android:text="注册"
         android:textSize="18dp"
+        android:textStyle="bold"
         android:background="@drawable/rounded_blue_button_selector"
         android:layout_marginTop="16dp"
         android:textColor="@color/black"

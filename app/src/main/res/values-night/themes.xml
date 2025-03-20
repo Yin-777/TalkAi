@@ -2,7 +2,7 @@
     <style name="Base.Theme.TalkAi" parent="Theme.Material3.DayNight.NoActionBar">
             <item name="colorPrimary">@color/dark_colorPrimary</item>
             <item name="colorPrimaryDark">@color/dark_colorPrimaryDark</item>
-            <item name="colorAccent">@color/dark_colorAccent</item>
+            <item name="colorAccent">@color/blue</item>
 
 
 

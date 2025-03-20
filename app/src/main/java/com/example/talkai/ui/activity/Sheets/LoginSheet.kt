@@ -1,5 +1,6 @@
 import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import com.example.talkai.R
 import com.example.talkai.ui.activity.Sheets.IDLoginSheet
@@ -10,6 +11,8 @@ class LoginSheet(context: Context) : BottomSheetDialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         // 设置布局
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_login, null)
@@ -35,17 +38,5 @@ class LoginSheet(context: Context) : BottomSheetDialog(context) {
         }
     }
 
-//    private fun handleEmailLogin() {
-//        // 处理邮箱登录逻辑
-//        val intent = Intent(context, EmailLoginActivity::class.java)
-//        intent.putExtra("email", "user@example.com") // 传递数据
-//        context.startActivity(intent)
-//    }
-//
-//    private fun handlePhoneLogin() {
-//        // 处理手机登录逻辑
-//        val intent = Intent(context, PhoneLoginActivity::class.java)
-//        intent.putExtra("phone", "1234567890") // 传递数据
-//        context.startActivity(intent)
-//    }
+
 }
