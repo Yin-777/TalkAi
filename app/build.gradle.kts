@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.fir.declarations.builder.buildScript
 import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 
 plugins {

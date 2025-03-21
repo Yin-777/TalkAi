@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
-
-
-
     //泛型，activity继承基类都要都自身viewBinding的类型
     // ViewBinding 实例
     private var _binding: VB? = null
