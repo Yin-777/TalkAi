@@ -22,5 +22,6 @@ class ShowActivity : BaseActivity<ActivityShowBinding>() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation1)
         bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.itemIconTintList = null
     }
 }

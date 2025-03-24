@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/TalkFragment"
-        android:icon="@drawable/bottomdraw"
+        android:icon="@drawable/bottomchat"
         android:title="@string/chat" />
     <item
         android:id="@+id/WordFragment"
-        android:icon="@drawable/word"
+        android:icon="@drawable/bottomword"
         android:title="@string/word" />
     <item
         android:id="@+id/MeFragment"
-        android:icon="@drawable/me"
+        android:icon="@drawable/bottomme"
         android:title="@string/me" />
 </menu>
