@@ -62,5 +62,6 @@ dependencies {
     // Kotlin
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.9")
     implementation ("androidx.navigation:navigation-ui-ktx:2.8.9")
-
+    //glide 图片加载框架
+    implementation ("com.github.bumptech.glide:glide:4.13.2") // 核心库
 }

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- res/values/styles.xml -->
+<?xml version="1.0" encoding="utf-8"?><!-- res/values/styles.xml -->
 <resources>
+
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight">
         <!-- 定义你的主题颜色 -->
         <item name="colorPrimary">@color/blue</item>
@@ -28,7 +28,6 @@
     </style>
 
 
-
     <!--提示加载框样式-->
     <style name="ZDYDialog" parent="Theme.AppCompat.Dialog">
         <!--去除5.0以后两侧留白问题-->
@@ -38,4 +37,8 @@
         <item name="colorAccent">@color/blue</item>
     </style>
 
+    <style name="GreenRadioButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#808080</item> <!-- 未选中色 -->
+        <item name="colorControlActivated">#4CAF50</item> <!-- 选中绿色 -->
+    </style>
 </resources>
