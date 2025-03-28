@@ -9,7 +9,7 @@
 
     <!-- 默认主题颜色 -->
     <color name="colorPrimary">#F3F3F3</color>
-    <color name="colorPrimaryDark">#F3F3F3</color>
+    <color name="colorPrimaryDark">#D5D5D5</color>
     <color name="colorAccent">#03DAC5</color>
 
     <!-- 深色主题颜色 -->
@@ -25,7 +25,4 @@
     <!-- res/values-night/colors.xml（深色主题） -->
     <color name="text_color_primary_night">#FFFFFF</color>  <!-- 浅色文字 -->
     <color name="text_color_secondary_night">#FFFFFF</color>
-
-
-
 </resources>

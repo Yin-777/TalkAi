@@ -13,7 +13,6 @@ class LoginSheet(context: Context) : BottomSheetDialog(context) {
         super.onCreate(savedInstanceState)
 
 
-
         // 设置布局
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_login, null)
         setContentView(bottomSheetView)

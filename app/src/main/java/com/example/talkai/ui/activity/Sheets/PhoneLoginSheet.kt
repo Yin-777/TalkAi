@@ -7,6 +7,7 @@ import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.talkai.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -17,14 +18,13 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
     private lateinit var etCode: AppCompatEditText
     private lateinit var btnSent: AppCompatButton
     private lateinit var btnLogin: AppCompatButton
+    private lateinit var ckBox:AppCompatCheckBox
 
     private var verificationCode: String? = null
     private var phoneNumber: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 使其跟随系统主题颜色
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
         // 设置布局
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_login_phone,null)
@@ -35,6 +35,7 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         btnLogin = bottomSheetView.findViewById<AppCompatButton>(R.id.btn_login_phone)
         etPhone = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_phone_login)  // 需要给你的手机号EditText添加id
         etCode = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_code_login)
+        ckBox = bottomSheetView.findViewById<AppCompatCheckBox>(R.id.ck_box)
 
         setupButtons()
     }
@@ -46,7 +47,13 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
 
         // 注册按钮
         btnLogin.setOnClickListener {
-            handleRegistration()
+            handleLogin()
+        }
+
+        // checkbox
+        // 监听复选框状态变化，动态更新按钮状态
+        ckBox.setOnCheckedChangeListener { _, isChecked ->
+            btnLogin.isEnabled = isChecked
         }
     }
     private fun handleVerificationCodeSending() {
@@ -69,7 +76,7 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         // 启动倒计时
         startCountDownTimer()
     }
-    private fun handleRegistration() {
+    private fun handleLogin() {
         // 获取输入框的验证码信息
         val inputCode = etCode.text.toString().trim()
 
@@ -83,8 +90,13 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
             return
         }
 
-        // 验证通过，执行注册逻辑
-        register()
+        if (!ckBox.isChecked) {
+            showToast("请先同意相关条款")
+            return
+        }
+
+        Login()
+
     }
 
     private fun isValidPhoneNumber(phone: String): Boolean {
@@ -116,9 +128,9 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun register() {
+    private fun Login() {
         // 这里添加你的注册逻辑
-        showToast("注册成功！")
+        showToast("登录成功！")
         dismiss()
     }
 }

@@ -7,12 +7,7 @@
     android:padding="20dp"
     android:background="@drawable/bg_rounded_top_corner"> <!-- 圆角背景 -->
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/remove_icon"
-        android:layout_marginBottom="10dp"
-        />
+
 
     <!-- 邮箱登录 -->
     <androidx.appcompat.widget.AppCompatButton
@@ -24,6 +19,7 @@
         android:textStyle="bold"
         android:background="@drawable/rounded_blue_button_selector"
         android:textColor="@color/black"
+        android:layout_marginTop="20dp"
         />
 
 

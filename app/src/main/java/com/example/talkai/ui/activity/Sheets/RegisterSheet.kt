@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.talkai.R
 import com.example.talkai.ui.activity.ProgressBar.ZDYProgressDialog
@@ -20,16 +21,17 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
     private lateinit var etCode: AppCompatEditText
     private lateinit var btnSent: AppCompatButton
     private lateinit var btnRegister: AppCompatButton
+    private lateinit var etName: AppCompatEditText
     private lateinit var etPassword: AppCompatEditText
+    private lateinit var ckBox: AppCompatCheckBox
 
     private var verificationCode: String? = null
     private var phoneNumber: String = ""
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 使其跟随系统主题颜色
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
         // 设置布局
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_register,null)
@@ -40,7 +42,9 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
         btnRegister = bottomSheetView.findViewById<AppCompatButton>(R.id.btn_register)
         etPhone = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_phone)  // 需要给你的手机号EditText添加id
         etCode = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_code)    // 需要给你的验证码EditText添加id
+        etName = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_name)
         etPassword = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_password)
+        ckBox = bottomSheetView.findViewById<AppCompatCheckBox>(R.id.ck_box)
         setupButtons()
 
     }
@@ -55,9 +59,15 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
         btnRegister.setOnClickListener {
             handleRegistration()
         }
+
+        // 监听复选框状态变化，动态更新按钮状态
+        ckBox.setOnCheckedChangeListener { _, isChecked ->
+            btnRegister.isEnabled = isChecked
+        }
     }
     private fun handleVerificationCodeSending() {
         phoneNumber = etPhone.text.toString().trim()
+
 
         if (phoneNumber.isEmpty()) {
             showToast("请输入手机号码")
@@ -68,6 +78,8 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
             showToast("手机号码格式不正确")
             return
         }
+
+
 
         // 生成并发送验证码（这里模拟生成）
         verificationCode = generateRandomCode()
@@ -80,6 +92,7 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
         // 获取输入框的验证码信息
         val inputCode = etCode.text.toString().trim()
         val inputPassword = etPassword.text.toString().trim()
+        val name = etName.text.toString().trim()
 
         if (inputCode.isEmpty()) {
             showToast("请输入验证码")
@@ -96,12 +109,20 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
             return
         }
 
+        if (name.isEmpty()){
+            showToast("请设置用户名")
+            return
+        }
+
         if (inputPassword.length < 6){
             showToast("密码必须大于六位")
             return
         }
 
-        // 验证通过，执行注册逻辑
+        if (!ckBox.isChecked) {
+            showToast("请同意相关条款")
+        }
+
         register()
     }
 
