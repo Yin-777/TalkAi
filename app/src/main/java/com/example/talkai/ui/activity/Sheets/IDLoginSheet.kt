@@ -47,11 +47,11 @@ class IDLoginSheet(context: Context):BottomSheetDialog(context) {
     }
 
     private fun handleLogin() {
-        val ID = edID.toString().trim()
-        val passWord = edPassword.toString().trim()
+        val ID = edID.text.toString().trim()
+        val passWord = edPassword.text.toString().trim()
 
         if (ID.isEmpty()){
-            showToast("ID不能为空")
+            showToast("手机号不能为空")
             return
         }
         if(passWord.isEmpty()){
