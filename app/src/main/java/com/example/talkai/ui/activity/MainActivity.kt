@@ -1,7 +1,5 @@
 package com.example.talkai.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import com.example.talkai.R
 
 import com.example.talkai.base.BaseActivity

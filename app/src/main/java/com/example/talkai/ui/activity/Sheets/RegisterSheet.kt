@@ -1,18 +1,21 @@
 package com.example.talkai.ui.activity.Sheets
 
-
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.talkai.R
 import com.example.talkai.ui.activity.ProgressBar.ZDYProgressDialog
+import com.example.talkai.ui.activity.ShowActivity
+import com.example.talkai.utils.NetUtil
+import com.example.talkai.utils.RegisterDTO
+import com.example.talkai.utils.ResultObject
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class RegisterSheet(context: Context):BottomSheetDialog(context) {
@@ -24,9 +27,12 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
     private lateinit var etName: AppCompatEditText
     private lateinit var etPassword: AppCompatEditText
     private lateinit var ckBox: AppCompatCheckBox
+    private lateinit var agreement: TextView
 
     private var verificationCode: String? = null
     private var phoneNumber: String = ""
+    private var inputCode:String = ""
+    private var inputPassword:String = ""
 
 
 
@@ -42,9 +48,9 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
         btnRegister = bottomSheetView.findViewById<AppCompatButton>(R.id.btn_register)
         etPhone = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_phone)  // 需要给你的手机号EditText添加id
         etCode = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_code)    // 需要给你的验证码EditText添加id
-        etName = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_name)
         etPassword = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_password)
         ckBox = bottomSheetView.findViewById<AppCompatCheckBox>(R.id.ck_box)
+        agreement = bottomSheetView.findViewById<TextView>(R.id.user_agreement)
         setupButtons()
 
     }
@@ -64,10 +70,14 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
         ckBox.setOnCheckedChangeListener { _, isChecked ->
             btnRegister.isEnabled = isChecked
         }
+
+        agreement.setOnClickListener {
+            val intent = Intent(context,UsersAgreementActivity::class.java)
+            context.startActivity(intent)
+        }
     }
     private fun handleVerificationCodeSending() {
         phoneNumber = etPhone.text.toString().trim()
-
 
         if (phoneNumber.isEmpty()) {
             showToast("请输入手机号码")
@@ -79,62 +89,110 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
             return
         }
 
+        // 调用发送验证码接口
+        NetUtil.sendCode(phoneNumber, object : NetUtil.NetCallback<ResultObject> {
+            override fun onSuccess(result: ResultObject) {
+                // 启动倒计时
+                startCountDownTimer()
+                showToast("验证码发送成功")
+            }
 
+            override fun onFailure(t: Throwable) {
+                showToast("验证码发送失败: ${t.message}")
+            }
+        })
 
-        // 生成并发送验证码（这里模拟生成）
-        verificationCode = generateRandomCode()
-        showToast("验证码已发送至：$phoneNumber")
-
-        // 启动倒计时
-        startCountDownTimer()
     }
     private fun handleRegistration() {
-        // 获取输入框的验证码信息
-        val inputCode = etCode.text.toString().trim()
-        val inputPassword = etPassword.text.toString().trim()
-        val name = etName.text.toString().trim()
+        inputCode = etCode.text.toString().trim()
+        inputPassword = etPassword.text.toString().trim()
+        phoneNumber = etPhone.text.toString().trim()
 
+        // 输入验证（原有逻辑不变）
+        if (phoneNumber.isEmpty()) {
+            showToast("请输入手机号码")
+            return
+        }
+        if (!isValidPhoneNumber(phoneNumber)) {
+            showToast("手机号码格式不正确")
+            return
+        }
         if (inputCode.isEmpty()) {
             showToast("请输入验证码")
             return
         }
-
-        if (inputCode != verificationCode) {
-            showToast("验证码不正确")
-            return
-        }
-
-        if (inputPassword.isEmpty()){
+        if (inputPassword.isEmpty()) {
             showToast("请设置密码")
             return
         }
-
-        if (name.isEmpty()){
-            showToast("请设置用户名")
-            return
-        }
-
-        if (inputPassword.length < 6){
+        if (inputPassword.length < 6) {
             showToast("密码必须大于六位")
             return
         }
-
         if (!ckBox.isChecked) {
             showToast("请同意相关条款")
+            return
         }
 
-        register()
+        // 显示加载对话框
+        val progressDialog = ZDYProgressDialog(context)
+        progressDialog.show()
+
+        // 1. 先校验验证码
+        val verifyRequest = NetUtil.VerifyCodeRequest(
+            phone = phoneNumber,
+            code = inputCode
+        )
+
+        NetUtil.verifyCode(verifyRequest, object : NetUtil.NetCallback<ResultObject> {
+            override fun onSuccess(result: ResultObject) {
+                if (result.code == 200) {
+                    // 2. 验证码正确，继续注册
+                    performRegistration(progressDialog)
+                } else {
+                    progressDialog.dismiss()
+                    showToast("验证码错误: ${result.msg}")
+                }
+            }
+
+            override fun onFailure(t: Throwable) {
+                progressDialog.dismiss()
+                showToast("验证码校验失败: ${t.message}")
+            }
+        })
     }
+
+    // 拆分注册逻辑到独立方法
+    private fun performRegistration(progressDialog: ZDYProgressDialog) {
+        val request = RegisterDTO(
+            username = phoneNumber,
+            code = inputCode,
+            password = inputPassword
+        )
+
+        NetUtil.register(request, object : NetUtil.NetCallback<ResultObject> {
+            override fun onSuccess(result: ResultObject) {
+                progressDialog.dismiss()
+                showToast("注册成功")
+                val intent = Intent(context, ShowActivity::class.java)
+                context.startActivity(intent)
+                dismiss()
+            }
+
+            override fun onFailure(t: Throwable) {
+                progressDialog.dismiss()
+                showToast("注册失败: ${t.message}")
+            }
+        })
+    }
+
 
     private fun isValidPhoneNumber(phone: String): Boolean {
         // 简单的手机号验证逻辑（可根据需求调整）
         return phone.length == 11 && phone.startsWith("1")
     }
 
-    private fun generateRandomCode(): String {
-        // 生成6位随机数字验证码
-        return (100000..999999).random().toString()
-    }
+
 
     @SuppressLint("SetTextI18n")
     private fun startCountDownTimer() {
@@ -155,9 +213,4 @@ class RegisterSheet(context: Context):BottomSheetDialog(context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun register() {
-        // 这里添加你的注册逻辑
-        showToast("注册成功！")
-        dismiss()
-    }
 }

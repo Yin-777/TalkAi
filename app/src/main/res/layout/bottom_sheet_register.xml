@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@drawable/bg_rounded_top_corner"
-    > <!-- 圆角背景 -->
-
+    android:background="@drawable/bg_rounded_top_corner"> <!-- 圆角背景 -->
 
 
 
@@ -27,7 +24,7 @@
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_code"
-            android:layout_width="200dp"
+            android:layout_width="170dp"
             android:layout_height="50dp"
             android:hint="验证码"
             android:textColorHint="?android:attr/textColorPrimary"
@@ -38,25 +35,16 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_sent"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/rounded_blue_button_selector"
             android:text="发送验证码"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="18dp" />
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/et_name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="用户名"
-        android:textColorHint="?android:attr/textColorPrimary"
-        android:textColor="?android:attr/textColorPrimary"
-        android:layout_margin="20dp"
-        />
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
@@ -66,6 +54,7 @@
         android:textColor="?android:attr/textColorPrimary"
         android:layout_margin="20dp"
         />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,8 +66,10 @@
             android:layout_height="match_parent"
             android:text="勾选即同意该APP"
             android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginEnd="4dp"
             />
         <TextView
+            android:id="@+id/user_agreement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
@@ -99,6 +90,8 @@
         android:textColor="@color/black"
         android:layout_marginBottom="40dp"
         />
+
+
 </LinearLayout>
 
 

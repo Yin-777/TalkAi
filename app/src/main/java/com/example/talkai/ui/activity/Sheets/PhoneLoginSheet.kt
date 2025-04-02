@@ -2,14 +2,22 @@ package com.example.talkai.ui.activity.Sheets
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.talkai.R
+import com.example.talkai.ui.activity.ShowActivity
+import com.example.talkai.utils.LambdaCodeLoginDTO
+import com.example.talkai.utils.LoginResult
+import com.example.talkai.utils.NetUtil
+import com.example.talkai.utils.ResultLoginVO
+import com.example.talkai.utils.ResultObject
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
@@ -19,9 +27,11 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
     private lateinit var btnSent: AppCompatButton
     private lateinit var btnLogin: AppCompatButton
     private lateinit var ckBox:AppCompatCheckBox
+    private lateinit var agreement: TextView
 
     private var verificationCode: String? = null
     private var phoneNumber: String = ""
+    private var inputCode:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +46,7 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         etPhone = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_phone_login)  // 需要给你的手机号EditText添加id
         etCode = bottomSheetView.findViewById<AppCompatEditText>(R.id.et_code_login)
         ckBox = bottomSheetView.findViewById<AppCompatCheckBox>(R.id.ck_box)
+        agreement = bottomSheetView.findViewById<TextView>(R.id.user_agreement)
 
         setupButtons()
     }
@@ -55,6 +66,11 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         ckBox.setOnCheckedChangeListener { _, isChecked ->
             btnLogin.isEnabled = isChecked
         }
+
+        agreement.setOnClickListener {
+            val intent = Intent(context,UsersAgreementActivity::class.java)
+            context.startActivity(intent)
+        }
     }
     private fun handleVerificationCodeSending() {
         phoneNumber = etPhone.text.toString().trim()
@@ -69,24 +85,25 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
             return
         }
 
-        // 生成并发送验证码（这里模拟生成）
-        verificationCode = generateRandomCode()
-        showToast("验证码已发送至：$phoneNumber")
+        // 调用发送验证码接口
+        NetUtil.sendCode(phoneNumber, object : NetUtil.NetCallback<ResultObject> {
+            override fun onSuccess(result: ResultObject) {
+                // 启动倒计时
+                startCountDownTimer()
+                showToast("验证码发送成功")
+            }
 
-        // 启动倒计时
-        startCountDownTimer()
+            override fun onFailure(t: Throwable) {
+                showToast("验证码发送失败: ${t.message}")
+            }
+        })
     }
-    private fun handleLogin() {
-        // 获取输入框的验证码信息
-        val inputCode = etCode.text.toString().trim()
 
+
+    private fun handleLogin() {
+        inputCode = etCode.text.toString().trim()
         if (inputCode.isEmpty()) {
             showToast("请输入验证码")
-            return
-        }
-
-        if (inputCode != verificationCode) {
-            showToast("验证码不正确")
             return
         }
 
@@ -95,8 +112,60 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
             return
         }
 
-        Login()
+        // 构造验证码校验请求
+        val verifyRequest = NetUtil.VerifyCodeRequest(
+            phone = phoneNumber,
+            code = inputCode
+        )
 
+        // 先校验验证码是否正确
+        NetUtil.verifyCode(verifyRequest, object : NetUtil.NetCallback<ResultObject> {
+            override fun onSuccess(result: ResultObject) {
+                if (result.code == 200) {
+                    // 验证码正确，继续执行登录逻辑
+                    performLogin()
+                } else {
+                    showToast("验证码错误: ${result.msg}")
+                }
+            }
+
+            override fun onFailure(t: Throwable) {
+                showToast("验证码校验失败: ${t.message}")
+            }
+        })
+    }
+
+    private fun performLogin() {
+        // 构造登录请求
+        val request = LambdaCodeLoginDTO(
+            username = phoneNumber,
+            code = inputCode
+        )
+
+        // 调用登录接口
+        NetUtil.loginWithCode(request, object : NetUtil.NetCallback<ResultLoginVO> {
+            override fun onSuccess(result: ResultLoginVO) {
+                saveLoginState(result.data)
+                showToast("登录成功")
+                val intent = Intent(context, ShowActivity::class.java)
+                context.startActivity(intent)
+                dismiss()
+            }
+
+            override fun onFailure(t: Throwable) {
+                showToast("登录失败: ${t.message}")
+            }
+        })
+    }
+
+    private fun saveLoginState(loginResult: LoginResult?) {
+        // 保存token和用户信息到本地
+        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("token", loginResult?.token ?: "")
+            // 保存其他用户信息...
+            apply()
+        }
     }
 
     private fun isValidPhoneNumber(phone: String): Boolean {
@@ -104,10 +173,10 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         return phone.length == 11 && phone.startsWith("1")
     }
 
-    private fun generateRandomCode(): String {
-        // 生成6位随机数字验证码
-        return (100000..999999).random().toString()
-    }
+//    private fun generateRandomCode(): String {
+//        // 生成6位随机数字验证码
+//        return (100000..999999).random().toString()
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun startCountDownTimer() {
@@ -128,9 +197,9 @@ class PhoneLoginSheet(context: Context):BottomSheetDialog(context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun Login() {
-        // 这里添加你的注册逻辑
-        showToast("登录成功！")
-        dismiss()
-    }
+//    private fun Login() {
+//        // 这里添加你的注册逻辑
+//        showToast("登录成功！")
+//        dismiss()
+//    }
 }

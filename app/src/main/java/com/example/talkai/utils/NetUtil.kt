@@ -6,32 +6,117 @@ import retrofit2.Response
 
 object NetUtil {
     // 网络请求工具类
-    private const val BASE_URL = "https://api.github.com/"
+    private const val BASE_URL = "http://frium.top:7654/" // 替换为实际地址
 
-    fun getUser(username: String, callback: NetCallback<User>) {
-        // 获取 Retrofit 实例
+    // 发送验证码
+    fun sendCode(username: String, callback: NetCallback<ResultObject>) {
         val retrofit = RetrofitClient.getClient(BASE_URL)
-        // 创建 API 接口实例
-        val apiService = retrofit.create(ApiService::class.java)
-        // 发起网络请求
-        val call = apiService.getUser(username)
-        call.enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful && response.body() != null) {
-                    callback.onSuccess(response.body()!!)
+        val service = retrofit.create(ApiService::class.java)
+        service.sendVerificationCode(username).enqueue(object : Callback<ResultObject> {
+            override fun onResponse(call: Call<ResultObject>, response: Response<ResultObject>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        if (it.code == 200) {
+                            callback.onSuccess(it)
+                        } else {
+                            callback.onFailure(Exception(it.msg))
+                        }
+                    }
                 } else {
-                    callback.onFailure(Exception("Response is not successful"))
+                    callback.onFailure(Exception("请求失败"))
                 }
             }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
+            override fun onFailure(call: Call<ResultObject>, t: Throwable) {
                 callback.onFailure(t)
             }
         })
     }
 
+    // 校验验证码
+    fun verifyCode(request: VerifyCodeRequest, callback: NetCallback<ResultObject>) {
+        val retrofit = RetrofitClient.getClient(BASE_URL)
+        val service = retrofit.create(ApiService::class.java)
+
+        service.verifyCode(request).enqueue(object : Callback<ResultObject> {
+            override fun onResponse(call: Call<ResultObject>, response: Response<ResultObject>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        if (it.code == 200) {
+                            callback.onSuccess(it)
+                        } else {
+                            callback.onFailure(Exception(it.msg))
+                        }
+                    }
+                } else {
+                    callback.onFailure(Exception("验证码校验失败"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResultObject>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+
+    // 验证码登录
+    fun loginWithCode(request: LambdaCodeLoginDTO, callback: NetCallback<ResultLoginVO>) {
+        val retrofit = RetrofitClient.getClient(BASE_URL)
+        val service = retrofit.create(ApiService::class.java)
+        service.loginWithCode(request).enqueue(object : Callback<ResultLoginVO> {
+            override fun onResponse(call: Call<ResultLoginVO>, response: Response<ResultLoginVO>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        if (it.code == 200) {
+                            callback.onSuccess(it)
+                        } else {
+                            callback.onFailure(Exception("登录失败"))
+                        }
+                    }
+                } else {
+                    callback.onFailure(Exception("请求失败"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResultLoginVO>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    // 用户注册
+    fun register(request: RegisterDTO, callback: NetCallback<ResultObject>) {
+        val retrofit = RetrofitClient.getClient(BASE_URL)
+        val service = retrofit.create(ApiService::class.java)
+        service.register(request).enqueue(object : Callback<ResultObject> {
+            override fun onResponse(call: Call<ResultObject>, response: Response<ResultObject>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        if (it.code == 200) {
+                            callback.onSuccess(it)
+                        } else {
+                            callback.onFailure(Exception(it.msg))
+                        }
+                    }
+                } else {
+                    callback.onFailure(Exception("注册失败"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResultObject>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+
     interface NetCallback<T> {
         fun onSuccess(result: T)
         fun onFailure(t: Throwable)
     }
+    data class VerifyCodeRequest(
+        val phone: String,
+        val code: String
+    )
 }
