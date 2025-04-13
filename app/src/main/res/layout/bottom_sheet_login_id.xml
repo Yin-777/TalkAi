@@ -14,7 +14,7 @@
         android:id="@+id/ed_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="手机号码"
+        android:hint="账号"
         android:textColorHint="?android:attr/textColorPrimary"
         android:textColor="?android:attr/textColorPrimary"
         android:layout_margin="20dp"

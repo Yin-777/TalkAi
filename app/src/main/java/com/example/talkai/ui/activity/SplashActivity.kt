@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.talkai.base.BaseActivity
 import com.example.talkai.databinding.ActivitySplashBinding
+import com.example.talkai.ui.activity.Sheets.IDLoginSheet
 import com.example.talkai.ui.activity.Sheets.RegisterSheet
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
@@ -22,7 +23,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     override fun initView() {
         binding.btLg.setOnClickListener {
-            val loginBottomSheetDialog = LoginSheet(this)
+            val loginBottomSheetDialog = IDLoginSheet(this)
             loginBottomSheetDialog.show()
         }
         binding.tvRg.setOnClickListener {

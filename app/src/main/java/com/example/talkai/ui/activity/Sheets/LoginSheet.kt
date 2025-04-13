@@ -3,7 +3,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.AppCompatButton
 import com.example.talkai.R
 import com.example.talkai.ui.activity.Sheets.IDLoginSheet
-import com.example.talkai.ui.activity.Sheets.PhoneLoginSheet
+//import com.example.talkai.ui.activity.Sheets.PhoneLoginSheet
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class LoginSheet(context: Context) : BottomSheetDialog(context) {
@@ -28,11 +28,11 @@ class LoginSheet(context: Context) : BottomSheetDialog(context) {
             dismiss() // 关闭 BottomSheetDialog
         }
 
-        btnPhone.setOnClickListener {
-            val loginBottomSheetDialog = PhoneLoginSheet(context)
-            loginBottomSheetDialog.show()
-            dismiss() // 关闭 BottomSheetDialog
-        }
+//        btnPhone.setOnClickListener {
+//            val loginBottomSheetDialog = PhoneLoginSheet(context)
+//            loginBottomSheetDialog.show()
+//            dismiss() // 关闭 BottomSheetDialog
+//        }
     }
 
 
