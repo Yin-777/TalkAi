@@ -13,8 +13,8 @@ import com.example.talkai.ui.activity.ProgressBar.ZDYProgressDialog
 import com.example.talkai.ui.activity.ShowActivity
 import com.example.talkai.utils.NetUtil
 import com.example.talkai.utils.ResultObject
+import com.example.talkai.utils.UserInfo
 import com.google.android.material.bottomsheet.BottomSheetDialog
-
 
 class IDLoginSheet(context: Context) : BottomSheetDialog(context) {
 
@@ -74,13 +74,13 @@ class IDLoginSheet(context: Context) : BottomSheetDialog(context) {
         NetUtil.login(username, password, object : NetUtil.NetCallback<ResultObject> {
             override fun onSuccess(result: ResultObject) {
                 progressDialog.dismiss()
+
                 if (result.code == 200) {
-                    showToast("登录成功")
                     saveLoginState(true)
-                    val intent = Intent(context, ShowActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    context.startActivity(intent)
-                    dismiss()
+                    saveToken(result.access_token)
+                    saveUserInfo(result.user_info)
+                    showToast("登录成功")
+                    navigateToMain()
                 } else {
                     showToast("登录失败: ${result.msg}")
                 }
@@ -93,21 +93,42 @@ class IDLoginSheet(context: Context) : BottomSheetDialog(context) {
         })
     }
 
-
-//    private fun handleLoginSuccess() {
-//        showToast("登录成功")
-//        saveLoginState(true)
-//        val intent = Intent(context, ShowActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        context.startActivity(intent)
-//        dismiss()
-//    }
+    private fun navigateToMain() {
+        val intent = Intent(context, ShowActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        context.startActivity(intent)
+        dismiss()
+    }
 
     private fun saveLoginState(isLoggedIn: Boolean) {
         val sharedPref = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             putBoolean("isLoggedIn", isLoggedIn)
             apply()
+        }
+    }
+
+    private fun saveToken(token: String) {
+        val sharedPref = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("access_token", token)
+            apply()
+        }
+
+        // 设置给 Retrofit
+        com.example.talkai.network.RetrofitClient.setToken(token)
+    }
+
+    private fun saveUserInfo(userInfo: UserInfo?) {
+        userInfo?.let {
+            val sharedPref = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            with(sharedPref.edit()) {
+                putString("user_id", it.id.toString())
+                putString("username", it.username)
+                putString("nickname", it.nickname)
+                putString("avatar", it.avatar)
+                apply()
+            }
         }
     }
 
