@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.example.talkai.R
 
-class ZDYProgressDialog(context: Context) : ProgressDialog(context) {
+class ZDYProgressDialog(context: Context) : ProgressDialog(context,R.style.TransparentDialog) {
 
     constructor(context: Context, theme: Int) : this(context)
 
@@ -29,6 +29,13 @@ class ZDYProgressDialog(context: Context) : ProgressDialog(context) {
         params?.width = WindowManager.LayoutParams.WRAP_CONTENT
         params?.height = WindowManager.LayoutParams.WRAP_CONTENT
         window?.attributes = params
+
+        val window = window
+        window?.setBackgroundDrawableResource(android.R.color.transparent) // 去除默认白边背景
+
+
+
+
     }
 
     override fun show() {

@@ -69,7 +69,7 @@ class IDLoginSheet(context: Context) : BottomSheetDialog(context) {
     }
 
     private fun proceedWithLogin(username: String, password: String) {
-        val progressDialog = ZDYProgressDialog(context).apply { show() }
+        val progressDialog = ZDYProgressDialog(context,R.style.ZDYDialog).apply { show() }
 
         NetUtil.login(username, password, object : NetUtil.NetCallback<ResultObject> {
             override fun onSuccess(result: ResultObject) {

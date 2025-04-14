@@ -70,7 +70,7 @@ class RegisterSheet(context: Context) : BottomSheetDialog(context) {
     }
 
     private fun proceedWithRegistration(username: String, password: String) {
-        val progressDialog = ZDYProgressDialog(context).apply { show() }
+        val progressDialog = ZDYProgressDialog(context,R.style.ZDYDialog).apply { show() }
 
         val request = RegisterDTO(username = username, password = password)
 
